@@ -8,17 +8,19 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Task } from "@/components/Dashboard"  // Import Task type
+import { supabase } from "@/lib/supabase"  // Assuming you have a supabase client setup
+import { useRouter } from 'next/navigation'  // To redirect after logout
 
 interface NavbarProps {
   onAddTask: (task: Task) => void;  // Expect the full Task type here
-  onLogout: () => void;
   userEmail: string;
-  userId: string; // Pass the userId here to link the task to the user
+  userId: string;  // Pass the userId here to link the task to the user
 }
 
 const statusOptions = ["To Do", "In Progress", "On Hold", "Completed"]
 
-export function Navbar({ onAddTask, onLogout, userEmail, userId }: NavbarProps) {
+export function Navbar({ onAddTask, userEmail, userId }: NavbarProps) {
+  const router = useRouter()
   const [isOpen, setIsOpen] = useState(false)
   const [newTask, setNewTask] = useState({ title: "", date: "", description: "", status: "To Do" })
 
@@ -29,11 +31,26 @@ export function Navbar({ onAddTask, onLogout, userEmail, userId }: NavbarProps) 
     setIsOpen(false)
   }
 
+  // Logout function
+  const handleLogout = async (e: React.MouseEvent) => {
+    e.preventDefault()  // Prevent page refresh on logout button click
+    try {
+      // Call Supabase signOut method
+      await supabase.auth.signOut()
+      console.log('User logged out')
+
+      // Optional: Redirect to login page after logout
+      router.push("/signin")
+    } catch (error) {
+      console.error("Error logging out:", error.message)
+    }
+  }
+
   return (
     <nav className="flex items-center justify-between p-4 bg-gray-100">
       <div className="flex items-center space-x-4">
         <span className="text-sm font-medium">{userEmail}</span>
-        <Button variant="ghost" size="sm" onClick={onLogout}>
+        <Button variant="ghost" size="sm" onClick={handleLogout}>
           Logout
           <LogOut className="h-4 w-4 ml-2" />
         </Button>
