@@ -7,14 +7,15 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from 
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { Task } from "@/components/Dashboard"  // Import Task type
-import { supabase } from "@/lib/supabase"  // Assuming you have a supabase client setup
-import { useRouter } from 'next/navigation'  // To redirect after logout
+import { Task } from "@/components/Dashboard"  
+import { supabase } from "@/lib/supabase"  
+import { useRouter } from 'next/navigation'  
 
 interface NavbarProps {
-  onAddTask: (task: Task) => void;  // Expect the full Task type here
+  onAddTask: (task: Task) => void;  
   userEmail: string;
-  userId: string;  // Pass the userId here to link the task to the user
+  userId: string;
+  onLogout: () => void;
 }
 
 const statusOptions = ["To Do", "In Progress", "On Hold", "Completed"]
@@ -25,21 +26,17 @@ export function Navbar({ onAddTask, userEmail, userId }: NavbarProps) {
   const [newTask, setNewTask] = useState({ title: "", date: "", description: "", status: "To Do" })
 
   const handleAddTask = () => {
-    const taskWithUser = { ...newTask, user_id: userId, id: Date.now() } // Add user_id and generate a temporary id (could be updated later when saved to DB)
-    onAddTask(taskWithUser) // Send the full Task object
+    const taskWithUser = { ...newTask, user_id: userId, id: Date.now() }
+    onAddTask(taskWithUser) 
     setNewTask({ title: "", date: "", description: "", status: "To Do" })
     setIsOpen(false)
   }
 
-  // Logout function
+  
   const handleLogout = async (e: React.MouseEvent) => {
-    e.preventDefault()  // Prevent page refresh on logout button click
+    e.preventDefault()
     try {
-      // Call Supabase signOut method
       await supabase.auth.signOut()
-      console.log('User logged out')
-
-      // Optional: Redirect to login page after logout
       router.push("/signin")
     } catch (error) {
       console.error("Error logging out:", error.message)

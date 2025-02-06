@@ -19,10 +19,10 @@ export function AuthForm({ mode }: AuthFormProps) {
   const [error, setError] = useState<string | null>(null)
   const router = useRouter()
 
-  // This state will help us handle the initial hydration and prevent the redirect
+  
   const [isMounted, setIsMounted] = useState(false)
 
-  // UseEffect to ensure we only run the redirect logic after the client is fully mounted
+  
   useEffect(() => {
     setIsMounted(true)
   }, [])
@@ -43,11 +43,11 @@ export function AuthForm({ mode }: AuthFormProps) {
         })
         if (error) throw error
 
-        // Check session after successful sign-in and redirect
+        
         const { data: { session } } = await supabase.auth.getSession()
 
         if (session) {
-          router.push("/dashboard") // Redirect to dashboard after successful sign-in
+          router.push("/dashboard") 
         } else {
           setError("Session not found after sign-in.")
         }
@@ -58,7 +58,7 @@ export function AuthForm({ mode }: AuthFormProps) {
     }
   }
 
-  // This effect is for checking session and redirecting if already authenticated
+  
   useEffect(() => {
     if (!isMounted) return
 

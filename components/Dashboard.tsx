@@ -26,7 +26,7 @@ export type Task = {
 export function Dashboard() {
   const [tasks, setTasks] = useState<Task[]>([])
   const [user, setUser] = useState<any>(null)
-  const [loading, setLoading] = useState(true) // Keep track of loading state
+  const [loading, setLoading] = useState(true) 
   const router = useRouter()
 
   useEffect(() => {
@@ -36,14 +36,14 @@ export function Dashboard() {
         if (session) {
           setUser(session.user)
           await fetchTasks(session.user.id)
-          setLoading(false) // Set loading to false once data is fetched
+          setLoading(false) 
         } else {
-          setLoading(false) // Ensure loading is set to false even if no session
-          router.push("/signin") // If no session, redirect to signin
+          setLoading(false) 
+          router.push("/signin") 
         }
       } catch (error) {
         console.error("Error fetching session:", error)
-        setLoading(false) // Set loading to false even if an error occurs
+        setLoading(false) 
       }
     }
 
@@ -60,7 +60,7 @@ export function Dashboard() {
   }
 
   const handleAddTask = async (task: Task) => {
-    // Add the task to Supabase
+   
     const { data, error } = await supabase.from("tasks").insert([
       {
         title: task.title,
@@ -74,7 +74,6 @@ export function Dashboard() {
     if (error) {
       console.error("Error adding task:", error)
     } else {
-      // After adding, fetch the updated tasks
       fetchTasks(task.user_id)
     }
   }
@@ -88,7 +87,6 @@ export function Dashboard() {
     if (error) {
       console.error("Error updating task:", error)
     } else {
-      // Fetch updated tasks
       fetchTasks(user.id)
     }
   }
@@ -102,7 +100,6 @@ export function Dashboard() {
     if (error) {
       console.error("Error deleting task:", error)
     } else {
-      // Fetch updated tasks
       fetchTasks(user.id)
     }
   }
@@ -116,13 +113,12 @@ export function Dashboard() {
     if (error) {
       console.error("Error updating status:", error)
     } else {
-      // Fetch updated tasks
       fetchTasks(user.id)
     }
   }
 
   if (loading) {
-    return <div>Loading...</div> // Still loading, show loading state
+    return <div>Loading...</div> 
   }
 
   if (!user) {

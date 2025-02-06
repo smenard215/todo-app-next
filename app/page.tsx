@@ -11,10 +11,8 @@ export default function Home() {
     const checkSession = async () => {
       const { data: { session } } = await supabase.auth.getSession()
       if (session) {
-        // If the user is logged in, redirect to dashboard
         router.push("/dashboard")
       } else {
-        // If the user is not logged in, redirect to signin
         router.push("/signin")
       }
     }
@@ -22,5 +20,5 @@ export default function Home() {
     checkSession()
   }, [router])
 
-  return null // You can return null or a loading state while checking session
+  return null
 }

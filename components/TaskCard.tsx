@@ -28,18 +28,17 @@ export function TaskCard({ id, title, date, description, status, onUpdate, onDel
   const [editedTask, setEditedTask] = useState({ title, date, description, status })
 
   const handleUpdate = () => {
-    // Destructure editedTask and pass only the relevant properties to onUpdate
     const { title, date, description, status } = editedTask
-    onUpdate(id, { title, date, description, status })  // Pass only the necessary properties
+    onUpdate(id, { title, date, description, status })  
     setIsOpen(false)
   }
 
   const handleDelete = () => {
-    onDelete(id)  // id is now a number
+    onDelete(id)  
   }
 
   const handleStatusChange = (newStatus: string) => {
-    onStatusChange(id, newStatus)  // id is now a number
+    onStatusChange(id, newStatus)  
   }
 
   return (
